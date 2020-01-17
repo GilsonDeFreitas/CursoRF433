@@ -1,0 +1,7 @@
+const char* ssid = "VIVO";
+const char* password = "12345678";
+
+byte LED1 = 5;
+byte LED2 = 4;
+byte LED3 = 0;
+byte LED4 = 14;
