@@ -8,17 +8,17 @@
  Autor: Gilson de Freitas
  Contato: 66-9-9998-6062
  Rondonópolis - MT
- Canal do Youtube: CurseAgora -> https://www.youtube.com/playlist?list=PLBN3lYxRDbp2teC_Bl79ajtkqRolPgDqt
+ Link do Curso de Programação: https://www.hotmart.com/product/arduino-referencia-de-programacao/J7636476D
 */
 
 #include <VirtualWire.h>
 #define pinRF 12
 
 unsigned long MAE   = 100000;//6 digitos
-unsigned long Filha = 100003;//6 digitos
+unsigned long Filha = 100002;//6 digitos
 unsigned long TODAS = 111111;//6 digitos
 
-int led = 10;
+int led = 13;
 
 struct tipoPacote
 {
@@ -38,7 +38,7 @@ void setup()
 {
   pinMode(led,OUTPUT);
   Serial.begin(9600);
-  vw_set_rx_pin(pinRF); // Define o pino 5 do Arduino como entrada de dados do receptor
+  vw_set_rx_pin(pinRF); // Define o pino 12 do Arduino como entrada de dados do receptor
   vw_setup(2000);       // Bits por segundo
   vw_rx_start();        // Inicializa o receptor
 }
@@ -60,6 +60,7 @@ void loop()
     
     if ( (pacote.PlacaMae == MAE) & ((pacote.PlacaFilha == Filha) || (pacote.PlacaFilha == TODAS)) )
     {
+      //pinMode(pacote.Pino,OUTPUT);
       digitalWrite(pacote.Pino, pacote.Valor);
     }
   }

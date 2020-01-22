@@ -8,7 +8,7 @@
  Autor: Gilson de Freitas
  Contato: 66-9-9998-6062
  Rondonópolis - MT
- Canal do Youtube: CurseAgora -> https://www.youtube.com/playlist?list=PLBN3lYxRDbp2teC_Bl79ajtkqRolPgDqt
+ Link do Curso de Programação: https://www.hotmart.com/product/arduino-referencia-de-programacao/J7636476D
 */
 #include <VirtualWire.h>
 #define pinRF  12 // Arduino uno 12
@@ -18,6 +18,11 @@ unsigned long FILHA1 = 100001;//6 digitos
 unsigned long FILHA2 = 100002;//6 digitos
 unsigned long FILHA3 = 100003;//6 digitos
 unsigned long TODAS  = 111111;//6 digitos
+
+byte bt1 = 2;
+byte bt2 = 3;
+byte bt3 = 4;
+byte bt4 = 5;
 
 struct tipoPacote
 {
@@ -33,6 +38,11 @@ tipoPacote pacote;
 
 void setup()
 {
+  pinMode(bt1,INPUT);
+  pinMode(bt2,INPUT);
+  pinMode(bt3,INPUT);
+  pinMode(bt4,INPUT);
+  
   vw_set_tx_pin(pinRF);
   vw_set_ptt_inverted(true);
   vw_setup(2000);
@@ -55,15 +65,27 @@ void enviarRF(unsigned long PlacaMae, unsigned long PlacaFilha, int Pino, int Va
 
 void loop()
 {
-  enviarRF(MAE, FILHA1, 10, 1, 1, 38.3);
-  delay(1000);
+  if (digitalRead(bt1) == HIGH)
+  {
+    enviarRF(MAE, FILHA1, 13, 1, 1, 38.3);
+    delay(300);
+  }
 
-  enviarRF(MAE, FILHA2, 10, 1, 2, 38.4);
-  delay(1000);
+  if (digitalRead(bt2) == HIGH)
+  {
+    enviarRF(MAE, FILHA2, 13, 1, 2, 38.4);
+    delay(300);
+  }
   
-  enviarRF(MAE, FILHA3, 10, 1, 3, 38.5);
-  delay(1000);
-
-  enviarRF(MAE, TODAS, 10, 0, 4, 38.6);
-  delay(1000);
+  if (digitalRead(bt3) == HIGH)
+  {
+    enviarRF(MAE, FILHA3, 13, 1, 3, 38.5);
+    delay(300);
+  }
+  
+  if (digitalRead(bt4) == HIGH)
+  {
+    enviarRF(MAE, TODAS, 13, 0, 4, 38.6);
+    delay(300);
+  }
 }
