@@ -8,11 +8,13 @@
  Autor: Gilson de Freitas
  Contato: 66-9-9998-6062
  Rondonópolis - MT
- Canal do Youtube: CurseAgora -> https://www.youtube.com/playlist?list=PLBN3lYxRDbp2teC_Bl79ajtkqRolPgDqt
+ Link do Curso de Programação em Arduino: https://www.hotmart.com/product/arduino-referencia-de-programacao/J7636476D
+ Link do Curso Crie teu site em uma semana: https://www.hotmart.com/product/curso-criar-e-publicar-site-do-zero-em-1-semana/A7631617J
+ Link do Livro Arduino e Firebase: https://produto.mercadolivre.com.br/MLB-1296636864-ebook-arduino-e-firebasedashboard-codigos-fontes-imediato-_JM?quantity=1
 */
 
 #include <RH_ASK.h> //INCLUSÃO DE BIBLIOTECA
-#include <SPI.h> //INCLUSÃO DE BIBLIOTECA
+#include <SPI.h>    //INCLUSÃO DE BIBLIOTECA
  
 //RH_ASK driver; //CRIA O DRIVER PARA COMUNICAÇÃO ARDUINO UNO E NANO: Transmissor no pino 12, Receptor no pino 11
 RH_ASK driver(2000, 2, 4, 5); //CRIA O DRIVER PARA COMUNICAÇÃO ESP8266-12E:
@@ -42,33 +44,22 @@ byte LED3 = 0;
 byte LED4 = 14;
 */
 
-byte statusled = 0;
 
 //---------------------------------------------------------------
-//Our HTML webpage contents in program memory
+// Cria a Página HTML
 char MAIN_page[] PROGMEM = R"=====(
 <html>
-<head>
-
-<meta http-equiv='refresh' content='3'>
-
-<style>
-  button{
-  font-size:50px;
-  }  
-table, th, td{
-  border: 2px solid black;
-  padding: 5px;
-  font-size:50px;
-}
-table {
-  border-spacing: 15px;
-}
-
-</style>
-</head><body>
-
-<table style="width:100%">
+  <head>
+    <meta http-equiv='refresh' content='3'>
+    <style>
+      button { font-size:50px; }  
+      table, th, td { border: 2px solid black; padding: 5px; font-size:50px;}
+      table { border-spacing: 15px; }
+    </style>
+  </head>
+  
+  <body>
+  <table style="width:100%">
   <tr>
     <td>Componente</td>
     <td>Ligar</td>
@@ -106,17 +97,17 @@ table {
 
 void handleRoot() { String s = MAIN_page; server.send(200, "text/html", s); }
 
-void handleled1on(){     /*digitalWrite(LED1,HIGH);*/ statusled = 1; server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|FILHA_118_01|3|1|LED|37.11|"); }
-void handleled1of(){     /*digitalWrite(LED1,LOW);*/  statusled = 0; server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|FILHA_118_01|3|0|LED|37.10|"); }
+void handleled1on(){     /*digitalWrite(LED1,HIGH);*/ server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|FILHA_118_01|LED|13|1|"); }
+void handleled1of(){     /*digitalWrite(LED1,LOW);*/  server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|FILHA_118_01|LED|13|0|"); }
 
-void handleled2on(){     /*digitalWrite(LED2,HIGH);*/ server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|FILHA_118_02|3|1|LED|37.21|"); }
-void handleled2of(){     /*digitalWrite(LED2,LOW);*/  server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|FILHA_118_02|3|0|LED|37.20|"); }
+void handleled2on(){     /*digitalWrite(LED2,HIGH);*/ server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|FILHA_118_02|LED|13|1|"); }
+void handleled2of(){     /*digitalWrite(LED2,LOW);*/  server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|FILHA_118_02|LED|13|0|"); }
 
-void handleled3on(){     /*digitalWrite(LED3,HIGH);*/ server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|FILHA_118_03|3|1|LED|37.31|"); }
-void handleled3of(){     /*digitalWrite(LED3,LOW);*/  server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|FILHA_118_03|3|0|LED|37.30|"); }
+void handleled3on(){     /*digitalWrite(LED3,HIGH);*/ server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|FILHA_118_03|LED|13|1|"); }
+void handleled3of(){     /*digitalWrite(LED3,LOW);*/  server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|FILHA_118_03|LED|13|0|"); }
 
-void handleledtodason(){ /*digitalWrite(LED4,HIGH);*/ server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|FILHA_118|3|1|LED|37.31|"); }
-void handleledtodasof(){ /*digitalWrite(LED4,LOW);*/  server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|FILHA_118|3|0|LED|37.30|"); }
+void handleledtodason(){ /*digitalWrite(LED4,HIGH);*/ server.send(200, "text/html", "ON"); enviaRF("|PLACA_MAE_118|TODAS_118|LED|13|1|"); }
+void handleledtodasof(){ /*digitalWrite(LED4,LOW);*/  server.send(200, "text/html", "OF"); enviaRF("|PLACA_MAE_118|TODAS_118|LED|13|0|"); }
 
 void enviaRF(char *msg)
 {  
@@ -134,23 +125,27 @@ void setup(){
   Serial.begin(115200);  
   Serial.println();
 
-  WiFi.mode(WIFI_AP);             //Only Access point
-  //WiFi.softAP(ssid, password);  //WIFI: Start HOTspot removing password will disable security
-  WiFi.softAP("ESP8266", "12345678");//AP
+  WiFi.mode(WIFI_AP);                     //Funcionamento somente como Ponto de Acesso
+  //WiFi.softAP(ssid, password);          //WIFI: Ponto de Acesso pela sua Wifi
+  WiFi.softAP("ESP8266", "12345678");     //Nome da Rede e senha que a Esp8266 vai gerar
 
-  //http://192.168.4.1  //IPAddress myIP = WiFi.softAPIP();   //Serial.print("Meu IP:");  //Serial.println(myIP);
-  server.on("/", handleRoot);      //Chama a página inicial
-  server.on("/led1on", handleled1on); server.on("/led1of", handleled1of); // executa o handle
-  server.on("/led2on", handleled2on); server.on("/led2of", handleled2of);
-  server.on("/led3on", handleled3on); server.on("/led3of", handleled3of);
-  server.on("/ledtodason", handleledtodason); server.on("/ledtodasof", handleledtodasof);
+  //http://192.168.4.1                    // conectar na placa com este IP
+  //IPAddress myIP = WiFi.softAPIP();     // lista o IP da placa. Serve para quando voce precisa conectar na placa mas não sabe o IP
+  //Serial.print("Meu IP:"+String(myIP)); // Mosta o IP no Monitor Serial
+  
+  //chamada das funções
+  server.on("/", handleRoot);                                             //Chama a página inicial (Página HTML)
+  server.on("/led1on", handleled1on); server.on("/led1of", handleled1of); //Chama os handles led1on e led1of
+  server.on("/led2on", handleled2on); server.on("/led2of", handleled2of); //Chama os handles led2on e led2of
+  server.on("/led3on", handleled3on); server.on("/led3of", handleled3of); //Chama os handles led3on e led3of
+  server.on("/ledtodason", handleledtodason); server.on("/ledtodasof", handleledtodasof); //Chama os handles ledtodason e ledtodasof
 
-  server.begin();                  //Start server
+  server.begin(); //Inicia o servidor para a chamada das funções
 }
 
 void loop()
 {
-  server.handleClient();          //Handle client requests  
-  //Serial.printf("Stations connected = %d\n", WiFi.softAPgetStationNum());
+  server.handleClient();          //Habilita a requisição para clientes (conexões através de celulares para acesso e controle)
+  //Serial.printf("Stations connected = %d\n", WiFi.softAPgetStationNum()); // mostra o número de dispositivos conectados
   delay(10);
 }
